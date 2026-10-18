@@ -29,6 +29,7 @@ KB_REPLY_WAIT = 0.12
 
 # ---------------- 程序行为 ----------------
 POLL_SECONDS = 300
+LOW_BATTERY_THRESHOLD = 15
 
 APP_NAME = "BatteryTray"
 APP_TITLE = "外设电量"

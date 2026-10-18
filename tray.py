@@ -36,7 +36,8 @@ WM_LBUTTONUP = 0x0202
 WM_RBUTTONUP = 0x0205
 
 NIM_ADD, NIM_MODIFY, NIM_DELETE = 0, 1, 2
-NIF_MESSAGE, NIF_ICON, NIF_TIP = 0x01, 0x02, 0x04
+NIF_MESSAGE, NIF_ICON, NIF_TIP, NIF_INFO = 0x01, 0x02, 0x04, 0x10
+NIIF_WARNING = 0x02
 TIMER_ID = 1
 
 LRESULT = ctypes.c_ssize_t
@@ -248,6 +249,7 @@ class TrayApp:
         self.icon = None
         self.icon_size = 32
         self.icon_key = "init"
+        self._low_notified = {"mouse": False, "keyboard": False}
         self._wndproc_ref = WNDPROC(self._wndproc)
         self._ready = threading.Event()
 
@@ -276,6 +278,23 @@ class TrayApp:
         nid.szTip = self._tip()[:127]
         shell32.Shell_NotifyIconW(NIM_ADD, ctypes.byref(nid))
 
+    def _notify(self, title: str, text: str) -> None:
+        nid = self._nid(NIF_INFO)
+        nid.szInfoTitle = title[:63]
+        nid.szInfo = text[:255]
+        nid.dwInfoFlags = NIIF_WARNING
+        shell32.Shell_NotifyIconW(NIM_MODIFY, ctypes.byref(nid))
+
+    def _check_low(self, key: str, name: str, level: int | None) -> None:
+        if level is None:
+            return
+        if level < config.LOW_BATTERY_THRESHOLD:
+            if not self._low_notified.get(key):
+                self._low_notified[key] = True
+                self._notify("电量不足", f"{name} 电量仅剩 {level}%，请充电")
+        else:
+            self._low_notified[key] = False
+
     def _apply_state(self) -> None:
         mouse, keyboard, _ = self.state.snapshot()
         key = (mouse.battery, keyboard.battery)
@@ -294,6 +313,9 @@ class TrayApp:
             nid = self._nid(NIF_TIP)
             nid.szTip = self._tip()[:127]
             shell32.Shell_NotifyIconW(NIM_MODIFY, ctypes.byref(nid))
+
+        self._check_low("mouse", config.DEVICE_MOUSE_NAME, mouse.battery)
+        self._check_low("keyboard", config.DEVICE_KEYBOARD_NAME, keyboard.battery)
 
     # ---------- 读取 ----------
     def request_refresh(self) -> None:
