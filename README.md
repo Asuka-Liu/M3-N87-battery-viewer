@@ -250,6 +250,15 @@ py -3 -m PyInstaller --noconfirm --clean --onefile --noconsole `
 - **不写日志**：默认不产生任何日志文件；只有 `--debug` 时才分配控制台打印。
 - **不上传**：设备路径、VID/PID 只在内存里用，不落盘。
 
+## 致谢
+
+本项目的**README 结构**、「用 prompt 做一份你自己的」这一节的思路，以及部分 Windows 底层
+踩坑记录，借鉴了 [yszyszysz233/2.4G-battery-viewer](https://github.com/yszyszysz233/2.4G-battery-viewer)。
+
+那个项目针对的是 ATK / VXE 鼠标与 DARKRIM 耳机，设备与协议都不同；本项目的两台设备、
+协议、代码与调试版都是独立实现的，但「零第三方依赖 + 让 Agent 在真机上复现协议」的
+方法论来自它，特此致谢。
+
 ## 说明
 
 协议来自公开文档，并在真机上验证：
