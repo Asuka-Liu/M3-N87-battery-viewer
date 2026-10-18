@@ -292,7 +292,7 @@ class TrayApp:
             if not self._low_notified.get(key):
                 self._low_notified[key] = True
                 self._notify("电量不足", f"{name} 电量仅剩 {level}%，请充电")
-        else:
+        elif level >= config.LOW_BATTERY_RESET:
             self._low_notified[key] = False
 
     def _apply_state(self) -> None:
