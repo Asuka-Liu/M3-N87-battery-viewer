@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.spec
+calibration.json
+*.log
+.venv/
