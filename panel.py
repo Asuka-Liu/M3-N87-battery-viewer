@@ -36,8 +36,32 @@ def _round_rect(canvas, x1, y1, x2, y2, r, **kw):
     return canvas.create_polygon(points, smooth=True, **kw)
 
 
+def _draw_device_icon(canvas, kind, x, y, size, color, w):
+    """线稿设备图标：mouse / keyboard。"""
+    s = size
+    if kind == "mouse":
+        _round_rect(canvas, x + 0.24 * s, y + 0.04 * s, x + 0.76 * s, y + 0.96 * s,
+                    0.26 * s, outline=color, width=w, fill="")
+        canvas.create_line(x + 0.5 * s, y + 0.04 * s, x + 0.5 * s, y + 0.42 * s,
+                           fill=color, width=w)
+        _round_rect(canvas, x + 0.42 * s, y + 0.16 * s, x + 0.58 * s, y + 0.30 * s,
+                    0.06 * s, outline=color, width=w, fill="")
+    else:
+        _round_rect(canvas, x + 0.04 * s, y + 0.30 * s, x + 0.96 * s, y + 0.70 * s,
+                    0.08 * s, outline=color, width=w, fill="")
+        kw = max(1, w - 1)
+        for row in range(3):
+            for col in range(8):
+                kx = x + 0.10 * s + col * 0.101 * s
+                ky = y + 0.355 * s + row * 0.09 * s
+                canvas.create_rectangle(kx, ky, kx + 0.062 * s, ky + 0.05 * s,
+                                        outline=color, width=kw)
+        canvas.create_line(x + 0.30 * s, y + 0.645 * s, x + 0.70 * s, y + 0.645 * s,
+                           fill=color, width=w)
+
+
 class Card(tk.Canvas):
-    def __init__(self, parent, title, source, scale=1.0):
+    def __init__(self, parent, title, source, kind="mouse", scale=1.0):
         self.scale = scale
         self.w = int(512 * scale)
         self.h = int(126 * scale)
@@ -47,9 +71,13 @@ class Card(tk.Canvas):
         pad = int(18 * s)
         _round_rect(self, 1, 1, self.w - 1, self.h - 1, int(12 * s),
                     fill=CARD, outline=BORDER, width=1)
-        self.create_text(pad, int(16 * s), text=title, anchor="nw",
+        icon_box = 54 * s
+        _draw_device_icon(self, kind, pad, (self.h - icon_box) / 2, icon_box,
+                          "#a6a8af", max(1, int(1.6 * s)))
+        tx = int(pad + icon_box + int(14 * s))
+        self.create_text(tx, int(26 * s), text=title, anchor="nw",
                          font=("Microsoft YaHei UI", 13, "bold"), fill=FG)
-        self.create_text(pad, int(42 * s), text=source, anchor="nw",
+        self.create_text(tx, int(52 * s), text=source, anchor="nw",
                          font=("Microsoft YaHei UI", 9), fill=MUTED)
         self.num = self.create_text(self.w - int(46 * s), int(62 * s), text="--",
                                     anchor="e", font=("Segoe UI", 32, "bold"),
@@ -138,9 +166,11 @@ class Panel:
             w.bind("<Button-1>", self._start_move)
             w.bind("<B1-Motion>", self._do_move)
 
-        self.mouse_card = Card(root, config.DEVICE_MOUSE_NAME, config.SOURCE_MOUSE, s)
+        self.mouse_card = Card(root, config.DEVICE_MOUSE_NAME, config.SOURCE_MOUSE,
+                               "mouse", s)
         self.mouse_card.pack(padx=pad, pady=(int(8 * s), int(10 * s)))
-        self.kb_card = Card(root, config.DEVICE_KEYBOARD_NAME, config.SOURCE_KEYBOARD, s)
+        self.kb_card = Card(root, config.DEVICE_KEYBOARD_NAME, config.SOURCE_KEYBOARD,
+                            "keyboard", s)
         self.kb_card.pack(padx=pad, pady=(0, int(4 * s)))
 
         bottom = tk.Frame(root, bg=BG)
