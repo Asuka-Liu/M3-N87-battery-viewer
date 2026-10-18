@@ -39,8 +39,8 @@ STARTUP_LNK_NAME = "BatteryTray.lnk"
 
 ICON_ID = 1
 
-DEVICE_MOUSE_NAME = "鼠标 M3"
-DEVICE_KEYBOARD_NAME = "键盘 N87"
+DEVICE_MOUSE_NAME = "达摩鲨M3"
+DEVICE_KEYBOARD_NAME = "腹灵N87樱之恋"
 SOURCE_MOUSE = "M3 接收器 · 2.4G · feature 0x51 / opcode 0x06"
 SOURCE_KEYBOARD = "N87 接收器 · 2.4G · feature 0xF7 状态"
 SOURCE_UNKNOWN = "未找到设备"

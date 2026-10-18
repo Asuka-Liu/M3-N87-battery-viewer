@@ -38,7 +38,7 @@ def _round_rect(canvas, x1, y1, x2, y2, r, **kw):
 
 ICON_FONT = "Segoe MDL2 Assets"
 GLYPHS = {"mouse": "\ue962", "keyboard": "\ue92e"}
-GLYPH_SIZE = {"mouse": 44, "keyboard": 36}
+GLYPH_SIZE = {"mouse": 35, "keyboard": 37}
 
 
 class Card(tk.Canvas):
