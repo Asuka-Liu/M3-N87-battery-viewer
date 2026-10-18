@@ -36,28 +36,9 @@ def _round_rect(canvas, x1, y1, x2, y2, r, **kw):
     return canvas.create_polygon(points, smooth=True, **kw)
 
 
-def _draw_device_icon(canvas, kind, x, y, size, color, w):
-    """线稿设备图标：mouse / keyboard。"""
-    s = size
-    if kind == "mouse":
-        _round_rect(canvas, x + 0.24 * s, y + 0.04 * s, x + 0.76 * s, y + 0.96 * s,
-                    0.26 * s, outline=color, width=w, fill="")
-        canvas.create_line(x + 0.5 * s, y + 0.04 * s, x + 0.5 * s, y + 0.42 * s,
-                           fill=color, width=w)
-        _round_rect(canvas, x + 0.42 * s, y + 0.16 * s, x + 0.58 * s, y + 0.30 * s,
-                    0.06 * s, outline=color, width=w, fill="")
-    else:
-        _round_rect(canvas, x + 0.04 * s, y + 0.30 * s, x + 0.96 * s, y + 0.70 * s,
-                    0.08 * s, outline=color, width=w, fill="")
-        kw = max(1, w - 1)
-        for row in range(3):
-            for col in range(8):
-                kx = x + 0.10 * s + col * 0.101 * s
-                ky = y + 0.355 * s + row * 0.09 * s
-                canvas.create_rectangle(kx, ky, kx + 0.062 * s, ky + 0.05 * s,
-                                        outline=color, width=kw)
-        canvas.create_line(x + 0.30 * s, y + 0.645 * s, x + 0.70 * s, y + 0.645 * s,
-                           fill=color, width=w)
+ICON_FONT = "Segoe MDL2 Assets"
+GLYPHS = {"mouse": "\ue962", "keyboard": "\ue92e"}
+GLYPH_SIZE = {"mouse": 44, "keyboard": 36}
 
 
 class Card(tk.Canvas):
@@ -71,9 +52,11 @@ class Card(tk.Canvas):
         pad = int(18 * s)
         _round_rect(self, 1, 1, self.w - 1, self.h - 1, int(12 * s),
                     fill=CARD, outline=BORDER, width=1)
-        icon_box = 54 * s
-        _draw_device_icon(self, kind, pad, (self.h - icon_box) / 2, icon_box,
-                          "#a6a8af", max(1, int(1.6 * s)))
+        icon_box = 58 * s
+        self.create_text(pad + icon_box / 2, self.h / 2,
+                         text=GLYPHS.get(kind, GLYPHS["mouse"]),
+                         font=(ICON_FONT, GLYPH_SIZE.get(kind, 40)),
+                         fill="#c3c5cc", anchor="center")
         tx = int(pad + icon_box + int(14 * s))
         self.create_text(tx, int(26 * s), text=title, anchor="nw",
                          font=("Microsoft YaHei UI", 13, "bold"), fill=FG)
