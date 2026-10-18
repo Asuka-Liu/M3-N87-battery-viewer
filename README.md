@@ -66,6 +66,11 @@ py -3 -m PyInstaller --noconfirm --clean --onefile --noconsole `
 
 或直接运行 `build.ps1`。
 
+### 版本资源与 MOTW
+
+- 构建命令带 `--version-file version_info.txt`，保证 CompanyName / ProductName / FileVersion / OriginalFilename 非空。
+- 构建后运行 `tools\strip-motw.ps1 -Path .\dist` 去除 MOTW，`-Verify` 复验应输出 `clean`。
+- 一键脚本：`build.ps1`。
 > 建议把 EXE 放在普通目录运行。低完整性目录（例如某些沙箱工作区）会导致
 > `Shell_NotifyIconW` 返回 `error 5`，PyInstaller 也可能无法在 `%TEMP%` 解压。
 

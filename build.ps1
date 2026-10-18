@@ -3,6 +3,8 @@ Set-Location $PSScriptRoot
 
 py -3 -m PyInstaller --noconfirm --clean --onefile --noconsole `
   --name BatteryTray --icon assets\battery.ico `
-  --add-data "assets\battery.ico;assets" main.py
+  --add-data "assets\battery.ico;assets" `
+  --version-file version_info.txt main.py
 
-Write-Host "built: dist\BatteryTray.exe"
+& .\tools\strip-motw.ps1 -Path '.\dist'
+& .\tools\strip-motw.ps1 -Path '.\dist' -Verify

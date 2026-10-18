@@ -1,0 +1,28 @@
+# UTF-8 编码保存；PyInstaller --version-file 使用
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(1, 0, 0, 0),
+    prodvers=(1, 0, 0, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+  ),
+  kids=[
+    StringFileInfo([
+      StringTable('080404b0', [
+        StringStruct('CompanyName', 'Asuka'),
+        StringStruct('FileDescription', 'BatteryTray - 鼠标/键盘电量托盘'),
+        StringStruct('FileVersion', '1.0.0.0'),
+        StringStruct('InternalName', 'BatteryTray'),
+        StringStruct('LegalCopyright', 'Copyright (C) 2026 Asuka'),
+        StringStruct('OriginalFilename', 'BatteryTray.exe'),
+        StringStruct('ProductName', 'BatteryTray'),
+        StringStruct('ProductVersion', '1.0.0.0')
+      ])
+    ]),
+    VarFileInfo([VarStruct('Translation', [2052, 1200])])
+  ]
+)
