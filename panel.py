@@ -64,8 +64,6 @@ class Card(tk.Canvas):
                          capstyle=tk.ROUND, fill=TRACK)
         self.fill = self.create_line(pad, y, pad, y, width=self.bar_w,
                                      capstyle=tk.ROUND, fill=color_for(None))
-        self.tick = self.create_line(pad, y, pad, y, width=max(2, int(3 * s)),
-                                     capstyle=tk.ROUND, fill=color_for(None))
         self._level = None
 
     def update(self, info):
@@ -75,15 +73,12 @@ class Card(tk.Canvas):
         if level is None:
             self.itemconfigure(self.num, text="--", fill=MUTED)
             self.itemconfigure(self.fill, state="hidden")
-            self.itemconfigure(self.tick, state="hidden")
             return
         color = color_for(level)
         self.itemconfigure(self.num, text=str(level), fill=FG)
         self.itemconfigure(self.fill, state="normal", fill=color)
-        self.itemconfigure(self.tick, state="normal", fill=color)
         end = self.bar_x1 + (self.bar_x2 - self.bar_x1) * level / 100.0
         self.coords(self.fill, self.bar_x1, self.bar_y, end, self.bar_y)
-        self.coords(self.tick, end, self.bar_y - int(7 * s), end, self.bar_y + int(7 * s))
 
 
 class Panel:
